@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    restart: always
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "localhost:${FLUENTD_PORT_TCP:?err}"
+    #     tag: swag
+    cap_add:
+      - NET_ADMIN
+    # command:
+    #   - "swag htpasswd -c /config/nginx/.htpasswd anyusername"
+    ports:
+      - 8080:80
+      - 8443:443
+    volumes:
+      - ${FOLDER_FOR_CONFIGS:?err}/swag:/config
+      # - ${FOLDER_FOR_CONFIGS:?err}/swag/snippets:/snippets:ro
+      ## Uncomment the above line if you want to use the Authelia configuration snippets.
+    extra_hosts:
+      - seandefontaine.com:127.0.0.1
+    environment:
+      - PUID=${PUID:?err}
+      - PGID=${PGID:?err}
+      - UMASK=${UMASK:?err}
+      - TZ=${TIMEZONE:?err}
+      - URL=${APP_HOST:?err}
+      - SUBDOMAINS=${SUBDOMAINS:?err}
+      - VALIDATION=${VALIDATION:?err}
+      # - CERTPROVIDER="${CERTPROVIDER:?err}"
+      - DNSPLUGIN=${DNSPLUGIN:?err}
+      # - ONLY_SUBDOMAINS='true'
+      # - EXTRA_DOMAINS=${EXTRA_DOMAINS:?err}
+      # - STAGING='false'
+      - DOCKER_MODS=${SWAG_DOCKER_MODS:?err}
+      - DOCKER_HOST=dockerproxy
+      - CF_ZONE_ID=${CF_ZONE_ID:?err}
+      - CF_ACCOUNT_ID=${CF_ACCOUNT_ID:?err}
+      - CF_API_TOKEN=${CF_API_TOKEN:?err}
+      - CF_TUNNEL_NAME=${CF_TUNNEL_NAME:?err}
+      - CF_TUNNEL_PASSWORD=${CF_TUNNEL_PASSWORD:?err}
+      - FILE__CF_TUNNEL_CONFIG=${FILE__CF_TUNNEL_CONFIG:?err}

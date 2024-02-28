@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+
+  # Use this version prod-esk environments
+  dockerproxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy
+    container_name: dockerproxy
+    restart: always
+    privileged: true
+    networks:
+      - dockerproxy
+    ports:
+      - "127.0.0.1:2375:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - LOG_LEVEL=info # debug,info,notice,warning,err,crit,alert,emerg
+      - POST=1 # Watchtower
+      - CONTAINERS=1 # SWAG
+
+  # Use this version for development purposes with Portainer
+  # dockerproxy:
+  #   image: ghcr.io/tecnativa/docker-socket-proxy
+  #   container_name: dockerproxy
+  #   restart: always
+  #   privileged: true
+  #   ports:
+  #     # - "127.0.0.1:2375:2375" # Port 2375 should only ever get exposed to the internal network. When possible use this line.
+  #     # use this for portainer to manage multiple docker endpoints within the home network.
+  #     - "2375:2375"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #   environment:
+  #     - LOG_LEVEL=debug # debug,info,notice,warning,err,crit,alert,emerg
+  #     ## Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc.).
+  #     # 0 to revoke access.
+  #     # 1 to grant access.
+  #     ## Granted by Default
+  #     - EVENTS=1
+  #     - PING=1
+  #     - VERSION=1
+  #     ## Revoked by Default
+  #     # Security critical
+  #     - AUTH=0
+  #     - SECRETS=0 # vault perhaps
+  #     - POST=1 # Watchtower
+  #     # Not always needed
+  #     - BUILD=0
+  #     - COMMIT=0
+  #     - CONFIGS=0
+  #     - CONTAINERS=1 # Portainer, SWAG
+  #     - ALLOW_START=1 # Portainer
+  #     - ALLOW_STOP=1 # Portainer
+  #     - ALLOW_RESTARTS=1 # Portainer
+  #     - DISTRIBUTION=0
+  #     - EXEC=0
+  #     - GRPC=0
+  #     - IMAGES=1 # Portainer
+  #     - INFO=1 # Portainer
+  #     - NETWORKS=1 # Portainer
+  #     - NODES=0
+  #     - PLUGINS=0
+  #     - SERVICES=1 # Portainer, SWAG
+  #     - SESSION=0
+  #     - SWARM=0
+  #     - SYSTEM=0
+  #     - TASKS=1 # Portainer
+  #     - VOLUMES=1 # Portainer

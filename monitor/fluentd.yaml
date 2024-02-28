@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  fluentd:
+    container_name: fluentd
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    ports:
+      # - "${FLUENTD_PORT_GUI:?}:9292" # gui port
+      - "${FLUENTD_PORT_TCP:?}:24224" # service ports
+      - "${FLUENTD_PORT_UDP:?}:24224/udp"

@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  cftunnel:
+    container_name: cftunnel
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CF_TUNNEL_TOKEN:?err}

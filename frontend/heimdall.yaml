@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "localhost:${FLUENTD_PORT_TCP:?err}"
+    #     tag: heimdall
+    labels:
+      - swag=enable
+    environment:
+      - PUID=${PUID:?err}
+      - PGID=${PGID:?err}
+      - UMASK=${UMASK:?err}
+      - TZ=${TIMEZONE:?err}
+    volumes:
+      - ${FOLDER_FOR_CONFIGS:?err}/heimdall:/config
+    restart: unless-stopped

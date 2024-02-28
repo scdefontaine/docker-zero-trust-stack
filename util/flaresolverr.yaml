@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  # used for browser testing purposes
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    labels:
+      - swag=enable
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=${TIMEZONE:?err}
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "localhost:${FLUENTD_PORT_SVC_TCP:?err}"
+    #     tag: flaresolverr

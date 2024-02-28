@@ -1,0 +1,137 @@
+version: "3.8"
+
+services:
+
+  # base services
+  dockerproxy:
+    extends:
+      file: ${ROOT_DIR:?err}/util/dockerproxy.yaml
+      service: dockerproxy
+
+  fluentd:
+    extends:
+      file: ${ROOT_DIR:?err}/monitor/fluentd.yaml
+      service: fluentd
+    networks:
+      - monitor
+      - util
+      - frontend
+      - backend
+      - cicd
+      - auth
+
+  # reverse proxy - sso - vpn server - cf_tunnel
+  cftunnel:
+    extends:
+      file: ${ROOT_DIR:?err}/util/cftunnel.yaml
+      service: cftunnel
+    networks:
+      - util
+
+  swag:
+    depends_on:
+      - fluentd
+      - dockerproxy
+      - cftunnel
+    networks:
+      - dockerproxy
+      - auth
+    extends:
+      file: ${ROOT_DIR:?err}/auth/swag.yaml
+      service: swag
+
+  flaresolverr:
+    depends_on:
+      - fluentd
+      - swag
+    networks:
+      - frontend
+    extends:
+      file: ${ROOT_DIR:?err}/util/flaresolverr.yaml
+      service: flaresolverr
+
+  # heimdall:
+  #   depends_on:
+  #     - fluentd
+  #     - swag
+  #   networks:
+  #     - frontend
+  #   extends:
+  #     file: ${ROOT_DIR:?err}/frontend/heimdall.yaml
+  #     service: heimdall
+
+
+  # portainer:
+  #   extends:
+  #     file: ${ROOT_DIR:?err}/util/portainer.yaml
+  #     service: portainer
+  #   depends_on:
+  #     - dockerproxy
+  #     - fluentd
+  #   networks:
+  #     - util
+  #     - dockerproxy
+
+  # monitoring - util
+
+  # data storage
+
+  # api services
+
+  # ui services
+
+  # other
+
+networks:
+
+  # docker socket proxy network
+  dockerproxy:
+    name: dockerproxy
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: ${PROXY_SUBNET:?err}
+  
+  monitor:
+    name: monitor
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${MONITOR_SUBNET:?err}
+  
+  frontend:
+    name: frontend
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${FRONTEND_SUBNET:?err}
+  
+  backend:
+    name: backend
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: ${BACKEND_SUBNET:?err}
+  
+  util:
+    name: util
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${UTIL_SUBNET:?err}
+  
+  auth:
+    name: auth
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${AUTH_SUBNET:?err}
+  
+  cicd:
+    name: cicd
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${CICD_SUBNET:?err}

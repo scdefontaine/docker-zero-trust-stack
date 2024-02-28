@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  portainer:
+    image: portainer/portainer-ee:latest
+    container_name: portainer
+    restart: always
+      # --base-url ${APP_HOST:?err}
+    command: >
+      -H tcp://dockerproxy:2375
+      --license-key "${PORTAINER_LICENSE_KEY:?err}"
+    volumes:
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - ${FOLDER_FOR_CONFIGS:?err}/portainer:/data
+    ports:
+      # - "${PORTAINER_PORT_HTTP:?err}:9000"
+      - "${PORTAINER_PORT_HTTPS:?err}:9443"

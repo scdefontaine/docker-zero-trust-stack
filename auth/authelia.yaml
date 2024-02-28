@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  authelia:
+    image: ghcr.io/authelia/authelia:4.34.6
+    container_name: authelia
+    user: "1000:1000"
+    environment:
+      - TZ=${TIMEZONE:?err}
+    volumes:
+      - ${FOLDER_FOR_CONFIGS:?err}/authelia:/config
+    restart: unless-stopped
+    # logging:s
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "localhost:${FLUENTD_PORT_TCP:?err}"
+    #     tag: authelia
