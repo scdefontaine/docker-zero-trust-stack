@@ -9,3 +9,6 @@
   - demo-api - fastapi - java spring
   - demo-database - postgres with liquibase
   - demo-ui - not my forte so maybe angularTS maybe not at all
+
+
+  *** this project is ongoing ***
