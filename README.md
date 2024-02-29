@@ -2,7 +2,7 @@
 
   - gluetun vpn client - wireguard vpn server
   - watchtower - auto image-updater
-  - portainer - container management (mainly used for development, turned off in prod)
+  - portainer - container orchestration (mainly used for development, turned off in prod)
   - fluentd - prometheus - grafana
   - swag auto-ssl with authelia sso and cloudflare zero trust
   - Vagrantfile packaging - for testing mainly but can be reused in other ways
