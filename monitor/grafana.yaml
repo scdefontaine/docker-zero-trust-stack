@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    depends_on:
+      - fluentd
+      - prometheus
+    labels:
+      - swag=enable
+      # - swag_auth=authelia
+    ports:
+      - '3000:3000'
+    volumes:
+      - ${FOLDER_FOR_CONFIGS:?err}/grafana:/var/lib/grafana
+    networks:
+      - monitor
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:${FLUENTD_PORT_TCP:?err}"
+        tag: grafana

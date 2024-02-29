@@ -11,6 +11,7 @@ services:
     #     tag: heimdall
     labels:
       - swag=enable
+      # - swag_auth=authelia
     environment:
       - PUID=${PUID:?err}
       - PGID=${PGID:?err}

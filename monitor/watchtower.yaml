@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    restart: unless-stopped
+    depends_on:
+      - dockerproxy
+      - fluentd
+    networks:
+      - dockerproxy
+      - monitor
+    # volumes:
+    #   - $LOCALTIME # need to update
+    command: --interval 21600
+    environment: 
+      - TZ=${TIMEZONE:?err}
+      - DEBUG=true
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      # - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      # - WATCHTOWER_NOTIFICATION_URL=pushover://shoutrrr:$PUSHAPI@$PUSHKEY/?devices=$PUSHDEVICE
+      - DOCKER_HOST=dockerproxy
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "localhost:${FLUENTD_PORT_TCP:?err}"
+    #     tag: watchtower

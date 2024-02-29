@@ -5,7 +5,7 @@ services:
   # base services
   dockerproxy:
     extends:
-      file: ${ROOT_DIR:?err}/util/dockerproxy.yaml
+      file: ${ROOT_DIR:?err}/security/dockerproxy.yaml
       service: dockerproxy
 
   fluentd:
@@ -23,10 +23,10 @@ services:
   # reverse proxy - sso - vpn server - cf_tunnel
   cftunnel:
     extends:
-      file: ${ROOT_DIR:?err}/util/cftunnel.yaml
+      file: ${ROOT_DIR:?err}/security/cftunnel.yaml
       service: cftunnel
     networks:
-      - util
+      - security
 
   swag:
     depends_on:
@@ -135,3 +135,11 @@ networks:
     ipam:
       config:
         - subnet: ${CICD_SUBNET:?err}
+  
+  security:
+    name: security
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: ${SECURITY_SUBNET:?err}

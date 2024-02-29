@@ -4,6 +4,9 @@ services:
   portainer:
     image: portainer/portainer-ee:latest
     container_name: portainer
+    labels:
+      - swag=enable
+      # - swag_auth=authelia
     restart: always
       # --base-url ${APP_HOST:?err}
     command: >

@@ -1,0 +1,11 @@
+# rename this file to tunnelconfig.yml
+# update your values accordingly
+# place file in ${FOLDER_FOR_CONFIGS:?err}/swag/dns-conf
+# restart / deploy swag
+
+ingress:
+  - hostname: website.com
+    service: https://website.com
+  - hostname: "*.website.com"
+    service: https://website.com
+  - service: http_status:404
