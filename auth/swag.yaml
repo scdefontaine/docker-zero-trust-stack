@@ -22,7 +22,7 @@ services:
       # - ${FOLDER_FOR_CONFIGS:?err}/swag/snippets:/snippets:ro
       ## Uncomment the above line if you want to use the Authelia configuration snippets.
     extra_hosts:
-      - seandefontaine.com:127.0.0.1
+      - ${APP_HOST:?err}:127.0.0.1
     environment:
       - PUID=${PUID:?err}
       - PGID=${PGID:?err}
